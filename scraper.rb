@@ -3,8 +3,11 @@
 
 require 'scraperwiki'
 require 'wikidata/fetcher'
+require 'rest-client'
 
 WikiData::Category.new('تصنيف:أعضاء_مجلس_الأمة_الكويتي_2013', 'ar').wikidata_ids.each do |id|
   data = WikiData::Fetcher.new(id: id).data('ar') or next
   ScraperWiki.save_sqlite([:id], data)
 end
+warn RestClient.post ENV['MORPH_REBUILDER_URL'], {} if ENV['MORPH_REBUILDER_URL']
+
